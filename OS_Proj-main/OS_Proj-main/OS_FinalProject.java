@@ -29,6 +29,7 @@ public class OS_FinalProject extends JFrame {
             "SSTF Disk Scheduling"
         };
 
+        // Dropdown to select the algorithm
         JComboBox<String> dropdown = new JComboBox<>(algorithms);
         JPanel inputPanel = new JPanel(new GridLayout(6, 2, 10, 10));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -44,6 +45,7 @@ public class OS_FinalProject extends JFrame {
 
             String selected = (String) dropdown.getSelectedItem();
 
+            // Display input fields based on the selected algorithm
             if ("Non-Preemptive Priority Scheduling".equals(selected)) {
                 setupPrioritySchedulingInput(inputPanel);
             } else if ("Round Robin Scheduling".equals(selected)) {
@@ -63,6 +65,7 @@ public class OS_FinalProject extends JFrame {
         setVisible(true);
     }
 
+    // Setup input fields for Non-Preemptive Priority Scheduling
     private void setupPrioritySchedulingInput(JPanel inputPanel) {
         inputPanel.add(new JLabel("Number of Processes:"));
         JTextField numProcessesField = new JTextField(10);
@@ -159,6 +162,7 @@ public class OS_FinalProject extends JFrame {
         return array;
     }
 
+    // Performs the Non-Preemptive Priority Scheduling
     private static String performPriorityScheduling(int numProcesses, int[] burstTimes, int[] priorities, int[] arrivalTimes) {
         String[] processes = new String[numProcesses];
         for (int i = 0; i < numProcesses; i++) {
@@ -204,7 +208,7 @@ public class OS_FinalProject extends JFrame {
             }
         }
 
-        // Generate output
+        // Generates output in tabular format
         StringBuilder result = new StringBuilder();
         result.append(String.format("%-10s%-10s%-10s%-10s%-10s%-10s%n", "Priority", "Process", "Arrival", "BT", "WT", "TAT"));
 
