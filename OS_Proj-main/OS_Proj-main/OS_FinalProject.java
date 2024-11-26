@@ -238,10 +238,12 @@ public class OS_FinalProject extends JFrame {
         int totalMovement = 0;
         ArrayList<Integer> sequence = new ArrayList<>();
 
+        // SSTF algorithm implementation starts here:
         while (!requestList.isEmpty()) {
             int closestRequest = requestList.get(0);
             int minDistance = Math.abs(closestRequest - headPosition);
 
+            // Find the closest request to the current head position
             for (int req : requestList) {
                 int distance = Math.abs(req - headPosition);
                 if (distance < minDistance) {
@@ -250,11 +252,15 @@ public class OS_FinalProject extends JFrame {
                 }
             }
 
+            // Process the closest request
             sequence.add(closestRequest);
             totalMovement += minDistance;
             headPosition = closestRequest;
+            
+            // Remove the processed request
             requestList.remove(Integer.valueOf(closestRequest));
         }
+        // SSTF algorithm implementation ends here
 
         result.append("Execution Sequence: ").append(sequence).append("\n");
         result.append("Total Head Movement: ").append(totalMovement).append("\n");
