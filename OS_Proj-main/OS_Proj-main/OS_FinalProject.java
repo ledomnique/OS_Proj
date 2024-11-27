@@ -168,50 +168,56 @@ public class OS_FinalProject extends JFrame {
         for (int i = 0; i < numProcesses; i++) {
             processes[i] = "P" + (i + 1);
         }
-
+    
         // Arrays to store results
         int[] completionTime = new int[numProcesses];
         int[] waitingTime = new int[numProcesses];
         int[] turnaroundTime = new int[numProcesses];
-
-        // Array to keep track of visited processes
+    
+        // Array to track if a process is completed
         boolean[] isCompleted = new boolean[numProcesses];
         int currentTime = 0, completed = 0;
-
+    
         while (completed < numProcesses) {
-            int idx = -1; // Index of the next process to execute
+            int idx = -1; // Index of the process to execute next
             int minPriority = Integer.MAX_VALUE;
-
+    
             for (int i = 0; i < numProcesses; i++) {
                 // Select the process with the highest priority (smallest priority value)
-                // that has arrived and is not completed
-                if (!isCompleted[i] && arrivalTimes[i] <= currentTime && priorities[i] < minPriority) {
-                    minPriority = priorities[i];
-                    idx = i;
+                // that has arrived, is not completed, and only if the CPU is idle
+                if (!isCompleted[i] && arrivalTimes[i] <= currentTime) {
+                    if (priorities[i] < minPriority) {
+                        minPriority = priorities[i];
+                        idx = i;
+                    }
+                    // Tie-breaking based on arrival time (optional)
+                    else if (priorities[i] == minPriority && arrivalTimes[i] < arrivalTimes[idx]) {
+                        idx = i;
+                    }
                 }
             }
-
+    
             if (idx != -1) {
                 // Execute the selected process
                 currentTime = Math.max(currentTime, arrivalTimes[idx]);
                 completionTime[idx] = currentTime + burstTimes[idx];
                 turnaroundTime[idx] = completionTime[idx] - arrivalTimes[idx];
                 waitingTime[idx] = turnaroundTime[idx] - burstTimes[idx];
-
+    
                 // Mark as completed
                 isCompleted[idx] = true;
                 completed++;
-                currentTime += burstTimes[idx];
+                currentTime += burstTimes[idx]; // Update the current time after execution
             } else {
                 // If no process is ready, increment time (idle state)
                 currentTime++;
             }
         }
-
-        // Generates output in tabular format
+    
+        // Generate output in tabular format
         StringBuilder result = new StringBuilder();
         result.append(String.format("%-10s%-10s%-10s%-10s%-10s%-10s%n", "Priority", "Process", "Arrival", "BT", "WT", "TAT"));
-
+    
         int totalWT = 0, totalTAT = 0;
         for (int i = 0; i < numProcesses; i++) {
             result.append(String.format(
@@ -221,10 +227,10 @@ public class OS_FinalProject extends JFrame {
             totalWT += waitingTime[i];
             totalTAT += turnaroundTime[i];
         }
-
+    
         result.append("\nAverage Waiting Time: ").append(String.format("%.2f", (double) totalWT / numProcesses));
         result.append("\nAverage Turnaround Time: ").append(String.format("%.2f", (double) totalTAT / numProcesses));
-
+    
         return result.toString();
     }
     private void swap(int[] arr, int i, int j) {
