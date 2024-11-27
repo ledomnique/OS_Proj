@@ -214,15 +214,31 @@ public class OS_FinalProject extends JFrame {
             }
         }
     
+        // Sort the results based on arrival times
+        int[] sortedIndices = new int[numProcesses];
+        for (int i = 0; i < numProcesses; i++) {
+            sortedIndices[i] = i;
+        }
+        // Sort indices based on arrivalTimes
+        for (int i = 0; i < numProcesses - 1; i++) {
+            for (int j = 0; j < numProcesses - i - 1; j++) {
+                if (arrivalTimes[sortedIndices[j]] > arrivalTimes[sortedIndices[j + 1]]) {
+                    int temp = sortedIndices[j];
+                    sortedIndices[j] = sortedIndices[j + 1];
+                    sortedIndices[j + 1] = temp;
+                }
+            }
+        }
+    
         // Generate output in tabular format
         StringBuilder result = new StringBuilder();
-        result.append(String.format("%-10s%-10s%-10s%-10s%-10s%-10s%n", "Priority", "Process", "Arrival", "BT", "WT", "TAT"));
+        result.append(String.format("%-10s%-10s%-10s%-10s%-10s%-10s%-10s%n", "Priority", "Process", "Arrival", "CT", "BT", "WT", "TAT"));
     
         int totalWT = 0, totalTAT = 0;
-        for (int i = 0; i < numProcesses; i++) {
+        for (int i : sortedIndices) {
             result.append(String.format(
-                    "%-10d%-10s%-10d%-10d%-10d%-10d%n",
-                    priorities[i], processes[i], arrivalTimes[i], burstTimes[i], waitingTime[i], turnaroundTime[i]
+                    "%-10d%-10s%-10d%-10d%-10d%-10d%-10d%n",
+                    priorities[i], processes[i], arrivalTimes[i], completionTime[i], burstTimes[i],  waitingTime[i], turnaroundTime[i]
             ));
             totalWT += waitingTime[i];
             totalTAT += turnaroundTime[i];
