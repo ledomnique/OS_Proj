@@ -239,16 +239,17 @@ public class OS_FinalProject extends JFrame {
         arr[j] = temp;
     }
 
+   // SSTF algorithm implementation starts here
     private String performSSTF(int[] requests, int headPosition) {
         StringBuilder result = new StringBuilder("SSTF Disk Scheduling Execution Log:\n");
 
+        // Initialization
         ArrayList<Integer> requestList = new ArrayList<>();
         for (int req : requests) requestList.add(req);
-
         int totalMovement = 0;
         ArrayList<Integer> sequence = new ArrayList<>();
 
-        // SSTF algorithm implementation starts here:
+        // Processing Requests
         while (!requestList.isEmpty()) {
             int closestRequest = requestList.get(0);
             int minDistance = Math.abs(closestRequest - headPosition);
@@ -270,13 +271,15 @@ public class OS_FinalProject extends JFrame {
             // Remove the processed request
             requestList.remove(Integer.valueOf(closestRequest));
         }
-        // SSTF algorithm implementation ends here
-
+        
+        // Final Output
         result.append("Execution Sequence: ").append(sequence).append("\n");
         result.append("Total Head Movement: ").append(totalMovement).append("\n");
 
         return result.toString();
     }
+
+    // SSTF algorithm implementation ends here
 
     private void performRoundRobin() {
         try {
